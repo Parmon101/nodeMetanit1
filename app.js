@@ -1,11 +1,9 @@
-const http = require('http');
+const fs = require('fs');
 
-let message = 'hello';
-http
-  .createServer(function (request, response) {
-    console.log(message);
-    response.end(message);
-  })
-  .listen(3000, '127.0.0.1', () => {
-    console.log('server start');
-  });
+const readableStream = fs.createReadStream('hello.txt');
+
+const writeableStream = fs.createWriteStream('some.txt');
+
+readableStream.on('data', function (chunk) {
+  writeableStream.write(chunk);
+});
