@@ -1,0 +1,12 @@
+{
+  "name": "helloapp",
+  "scripts": {
+    "start": "nodemon app.js",
+    "dev": "node app.js Tom 26",
+    "test": "echo \"Hello from GitHub\" && exit 1"
+  },
+  "version": "1.0.0",
+  "dependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
