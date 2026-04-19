@@ -1,9 +1,21 @@
-const fs = require('fs');
+const http = require('http');
 
-const readableStream = fs.createReadStream('hello.txt');
+http
+  .createServer(function (request, response) {
+    response.setHeader('Content-Type', 'text/html; charset=utf-8');
 
-const writeableStream = fs.createWriteStream('some.txt');
+    if (request.url === '/') {
+      response.statusCode = 302;
+      response.setHeader('Location', '/newpage');
+    } else if (request.url === '/newpage') {
+      response.write('<h1>Привет мир!</h1>');
+    } else {
+      response.statusCode = 404;
+      response.write('<h1>404</h1>');
+    }
 
-readableStream.on('data', function (chunk) {
-  writeableStream.write(chunk);
-});
+    response.end();
+  })
+  .listen(3000, function () {
+    console.log('Server running at http://127.0.0.1:3000/');
+  });
