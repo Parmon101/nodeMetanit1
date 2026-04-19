@@ -2,13 +2,28 @@ const express = require('express');
 
 const app = express();
 
-const urlencodedParser = express.urlencoded({ extended: false });
+const productRouter = express.Router();
 
-app.get('/products/:productId/productName/:nameId', function (request, response) {
-  const pId = request.params.productId;
-  const pnId = request.params.nameId;
+productRouter.use('/create', function (request, response) {
+  response.send('create product');
+});
 
-  response.send(`Product ID: ${pId}, Product Name: ${pnId}`);
+productRouter.use('/:id', function (request, response) {
+  response.send(`product ${request.params.id}`);
+});
+
+productRouter.use('/', function (request, response) {
+  response.send('products list');
+});
+
+app.use('/products', productRouter);
+
+app.use('/about', function (_, response) {
+  response.send('about page');
+});
+
+app.use('/', function (request, response) {
+  response.send('main page');
 });
 
 app.listen(3000, function () {
