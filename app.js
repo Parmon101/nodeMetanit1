@@ -2,19 +2,18 @@ const express = require('express');
 
 const app = express();
 
-// const jsoneParse = express.json();
-app.use(express.json());
+app.set('view engine', 'hbs');
 
-app.post('/user', function (request, response) {
-  const user = request.body;
-  console.log(user);
-  if (!user) return response.sendStatus(400);
-  const responseText = `Name: ${user.name}, Age: ${user.age}`;
-  response.send({ message: responseText });
+app.use('/contact', function (_, response) {
+  response.render('contact.hbs', {
+    title: 'My contact dock',
+    emailVisible: true,
+    emails: ['ololo@ya.ru', 'sssss@ds.ds'],
+    phone: '+1212',
+  });
 });
-
-app.get('/', function (request, response) {
-  response.sendFile(__dirname + '/index.html');
+app.use('/', function (_, response) {
+  response.send('main page');
 });
 
 app.listen(3000, function () {
