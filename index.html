@@ -1,12 +1,17 @@
 <!doctype html>
 <html>
   <head>
-    <title>Главная</title>
     <meta charset="utf-8" />
+    <title>learn node</title>
   </head>
   <body>
-    <h1>{header}</h1>
-    <p>{message}</p>
+    <script>
+      sendUser();
+      async function sendUser() {
+        const response = await fetch('/user', { method: 'POST', body: 'Tom Smith' });
+        const responseText = await response.text();
+        console.log(responseText);
+      }
+    </script>
   </body>
-  <html></html>
 </html>

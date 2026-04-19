@@ -2,22 +2,26 @@ const http = require('http');
 const fs = require('fs');
 
 http
-  .createServer(function (request, response) {
-    fs.readFile('index.html', function (error, data) {
-      if (error) {
-        response.statusCode = 500;
-        response.end();
-      } else {
-        const message = 'lear node';
-        const header = 'main';
-        const dataText = data
-          .toString()
-          .replace(/{header}/g, header)
-          .replace(/{message}/g, message);
-        response.end(dataText);
+  .createServer(async (request, response) => {
+    if (request.url === '/user') {
+      const buffers = [];
+
+      for await (const chunk of request) {
+        buffers.push(chunk);
       }
-    });
+
+      const user = JSON.parse(Buffer.concat(buffers).toString());
+      console.log(user.name, '-', user?.age);
+      // const data = Buffer.concat(buffers).toString();
+      // console.log(data);
+
+      response.end('data success');
+    } else {
+      fs.readFile('./index.html', function (err, data) {
+        response.end(data);
+      });
+    }
   })
   .listen(3000, function () {
-    console.log('Server running at http://127.0.0.1:3000/index.html');
+    console.log('Server running at http://127.0.0.1:3000/');
   });
