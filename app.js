@@ -4,13 +4,11 @@ const app = express();
 
 const urlencodedParser = express.urlencoded({ extended: false });
 
-app.get('/', function (request, response) {
-  response.sendFile(__dirname + '/index.html');
-});
-app.post('/', urlencodedParser, function (request, response) {
-  if (!request.body) return response.sendStatus(400);
-  console.log(request.body);
-  response.send(`${request.body.userName} ${request.body.userAge}`);
+app.get('/products/:productId/productName/:nameId', function (request, response) {
+  const pId = request.params.productId;
+  const pnId = request.params.nameId;
+
+  response.send(`Product ID: ${pId}, Product Name: ${pnId}`);
 });
 
 app.listen(3000, function () {
