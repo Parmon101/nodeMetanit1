@@ -2,28 +2,19 @@ const express = require('express');
 
 const app = express();
 
-const productRouter = express.Router();
+// const jsoneParse = express.json();
+app.use(express.json());
 
-productRouter.use('/create', function (request, response) {
-  response.send('create product');
+app.post('/user', function (request, response) {
+  const user = request.body;
+  console.log(user);
+  if (!user) return response.sendStatus(400);
+  const responseText = `Name: ${user.name}, Age: ${user.age}`;
+  response.send({ message: responseText });
 });
 
-productRouter.use('/:id', function (request, response) {
-  response.send(`product ${request.params.id}`);
-});
-
-productRouter.use('/', function (request, response) {
-  response.send('products list');
-});
-
-app.use('/products', productRouter);
-
-app.use('/about', function (_, response) {
-  response.send('about page');
-});
-
-app.use('/', function (request, response) {
-  response.send('main page');
+app.get('/', function (request, response) {
+  response.sendFile(__dirname + '/index.html');
 });
 
 app.listen(3000, function () {
