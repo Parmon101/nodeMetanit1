@@ -3,25 +3,18 @@ const fs = require('fs');
 
 http
   .createServer(function (request, response) {
-    console.log(`Запрошенный адрес: ${request.url}`);
-
-    const filePath = request.url.substring(1);
-
-    // fs.access(filePath, fs.constants.R_OK, (err) => {
-    //   if (err) {
-    //     response.statusCode = 404;
-    //     response.end('resource not found');
-    //   } else {
-    //     fs.createReadStream(filePath).pipe(response);
-    //   }
-    // });
-
-    fs.readFile(filePath, function (error, data) {
+    fs.readFile('index.html', function (error, data) {
       if (error) {
-        response.statusCode = 404;
-        response.end('resource not found');
+        response.statusCode = 500;
+        response.end();
       } else {
-        response.end(data);
+        const message = 'lear node';
+        const header = 'main';
+        const dataText = data
+          .toString()
+          .replace(/{header}/g, header)
+          .replace(/{message}/g, message);
+        response.end(dataText);
       }
     });
   })
