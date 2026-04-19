@@ -1,33 +1,17 @@
-const http = require('http');
-const fs = require('fs');
+const express = require('express');
 
-http
-  .createServer(async (request, response) => {
-    if (request.url == '/user') {
-      let body = '';
+const app = express();
 
-      for await (const chunk of request) {
-        body += chunk;
-      }
+app.get('/', function (request, response) {
+  response.send('<h1>Express from GitHub</h1>');
+});
+app.get('/about', function (request, response) {
+  response.send('<h1>About</h1>');
+});
+app.get('/contact', function (request, response) {
+  response.send('<h1>Contact</h1>');
+});
 
-      let userName = '';
-      let userAge = 0;
-      console.log('body', body);
-      const params = body.split('&');
-      console.log('params', params);
-
-      for (const param of params) {
-        console.log(param);
-        const [paramName, paramValue] = param.split('=');
-        if (paramName === 'username') userName = paramValue;
-        if (paramName === 'userage') userAge = paramValue;
-      }
-
-      response.end(`You name: ${userName}, age: ${userAge}`);
-    } else {
-      fs.readFile('index.html', (_, data) => response.end(data));
-    }
-  })
-  .listen(3000, function () {
-    console.log('Server running at http://127.0.0.1:3000/');
-  });
+app.listen(3000, function () {
+  console.log('Example app listening on port http://localhost:3000');
+});
