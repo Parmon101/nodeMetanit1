@@ -2,25 +2,15 @@ const express = require('express');
 
 const app = express();
 
-app.get('/', function (_, response) {
-  response.send('<h1>main page</h1>');
-});
+const urlencodedParser = express.urlencoded({ extended: false });
 
-app.use('/about', function (request, response) {
-  // 1
-  //   const id = request.query.id;
-  //   const userName = request.query.name;
-  //   response.send(`<h1>about page</h1>
-  // <p>id: ${id}</p>
-  // <p>name: ${userName}</p>`);
-  // 2
-  // const users = request.query.name;
-  // let responseText = '<ul>';
-  // for (username of users) {
-  //   responseText += `<li>${username}</li>`;
-  // }
-  // responseText += '</ul>';
-  // response.send(responseText);
+app.get('/', function (request, response) {
+  response.sendFile(__dirname + '/index.html');
+});
+app.post('/', urlencodedParser, function (request, response) {
+  if (!request.body) return response.sendStatus(400);
+  console.log(request.body);
+  response.send(`${request.body.userName} ${request.body.userAge}`);
 });
 
 app.listen(3000, function () {
