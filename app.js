@@ -3,23 +3,29 @@ const fs = require('fs');
 
 http
   .createServer(async (request, response) => {
-    if (request.url === '/user') {
-      const buffers = [];
+    if (request.url == '/user') {
+      let body = '';
 
       for await (const chunk of request) {
-        buffers.push(chunk);
+        body += chunk;
       }
 
-      const user = JSON.parse(Buffer.concat(buffers).toString());
-      console.log(user.name, '-', user?.age);
-      // const data = Buffer.concat(buffers).toString();
-      // console.log(data);
+      let userName = '';
+      let userAge = 0;
+      console.log('body', body);
+      const params = body.split('&');
+      console.log('params', params);
 
-      response.end('data success');
+      for (const param of params) {
+        console.log(param);
+        const [paramName, paramValue] = param.split('=');
+        if (paramName === 'username') userName = paramValue;
+        if (paramName === 'userage') userAge = paramValue;
+      }
+
+      response.end(`You name: ${userName}, age: ${userAge}`);
     } else {
-      fs.readFile('./index.html', function (err, data) {
-        response.end(data);
-      });
+      fs.readFile('index.html', (_, data) => response.end(data));
     }
   })
   .listen(3000, function () {
