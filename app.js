@@ -2,7 +2,7 @@ const express = require('express');
 
 const app = express();
 
-app.set('view engine', 'ejs');
+app.set('view engine', 'pug');
 
 app.use('/contact', function (request, response) {
   response.render('contact', {
