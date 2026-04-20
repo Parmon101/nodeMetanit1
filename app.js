@@ -1,38 +1,19 @@
 const express = require('express');
-const hbs = require('hbs');
 
 const app = express();
 
-hbs.registerHelper('getTime', function () {
-  const myDate = new Date();
-  const hour = myDate.getHours();
-  let minute = myDate.getMinutes();
-  let second = myDate.getSeconds();
+app.set('view engine', 'ejs');
 
-  if (minute < 10) {
-    minute = '0' + minute;
-  }
-  if (second < 10) {
-    second = '0' + second;
-  }
-
-  return `Current time: ${hour}:${minute}:${second}`;
-});
-
-hbs.registerHelper('createStringList', function (array) {
-  let result = '';
-  for (let i = 0; i < array.length; i++) {
-    result += `<li>${array[i]}</li>`;
-  }
-  return new hbs.SafeString(`<ul>${result}</ul>`);
-});
-
-app.set('view engine', 'hbs');
-
-app.get('/', function (_, response) {
-  response.render('home.hbs', {
-    fruit: ['apple', 'orange', 'banana', 'peach'],
+app.use('/contact', function (request, response) {
+  response.render('contact', {
+    title: 'Contact page',
+    emailVisible: true,
+    emails: ['qG2qB@example.com', 'z9g5V@example.com'],
+    phone: '123-456-7890',
   });
+});
+app.use('/', function (request, response) {
+  response.send('main');
 });
 
 app.listen(3000, function () {
