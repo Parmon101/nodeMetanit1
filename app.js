@@ -1,29 +1,38 @@
 const express = require('express');
-const expressHbs = require('express-handlebars');
 const hbs = require('hbs');
+
 const app = express();
 
-app.engine(
-  'hbs',
-  expressHbs.engine({
-    layoutsDir: 'views/layouts',
-    defaultLayout: 'layout',
-    extname: 'hbs',
-  }),
-);
-app.set('view engine', 'hbs');
-hbs.registerPartials(__dirname + '/views/partials');
+hbs.registerHelper('getTime', function () {
+  const myDate = new Date();
+  const hour = myDate.getHours();
+  let minute = myDate.getMinutes();
+  let second = myDate.getSeconds();
 
-app.use('/contact', function (_, response) {
-  response.render('contact', {
-    title: 'Contact page',
-    email: 'n1n1n1@n1n1',
-    phone: '123-123-123',
-  });
+  if (minute < 10) {
+    minute = '0' + minute;
+  }
+  if (second < 10) {
+    second = '0' + second;
+  }
+
+  return `Current time: ${hour}:${minute}:${second}`;
 });
 
-app.use('/', function (_, response) {
-  response.render('home.hbs');
+hbs.registerHelper('createStringList', function (array) {
+  let result = '';
+  for (let i = 0; i < array.length; i++) {
+    result += `<li>${array[i]}</li>`;
+  }
+  return new hbs.SafeString(`<ul>${result}</ul>`);
+});
+
+app.set('view engine', 'hbs');
+
+app.get('/', function (_, response) {
+  response.render('home.hbs', {
+    fruit: ['apple', 'orange', 'banana', 'peach'],
+  });
 });
 
 app.listen(3000, function () {
